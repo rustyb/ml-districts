@@ -3,5 +3,6 @@ import logo from './logo';
 
 export default {
   environment: 'production',
-  consoleMessage: logo
+  consoleMessage: logo,
+  api: 'https://dash.maplesotho.com/effort-api'
 };
