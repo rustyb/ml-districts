@@ -17,7 +17,7 @@ class Visualizaiton extends Component {
   }
 
   componentDidMount () {
-    this.props._fetchDistricts('2017-01-01');
+    this.props._fetchDistricts();
   }
 
   getNewStats (date) {
