@@ -55,7 +55,7 @@ class Summary extends Component {
           <dd>{numeral(this.props.districts[null][0].t).format()}</dd>
           {districts.map((dis) => {
             return (<div key={dis}>
-              <dt>{dis}</dt>
+              <dt><a href={`#${dis}`}>{dis}</a></dt>
               <dd>{numeral(this.props.districts[dis][0].t).format()}</dd>
               </div>
               )

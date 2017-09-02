@@ -48,7 +48,7 @@ class Visualizaiton extends Component {
     const total = +data[0].t
     return (
       <div key={district+''}>
-      <h2>{`${district} (${numeral(total).format()})`}</h2>
+      <h2 id={district}>{`${district} (${numeral(total).format()})`}</h2>
       <table  className="table">
         <thead>
           <tr>
