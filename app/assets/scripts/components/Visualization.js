@@ -84,6 +84,7 @@ class Visualizaiton extends Component {
             focusedInput={this.state.focusedInput} // PropTypes.bool
             onFocusChange={this.onFocusChange} // PropTypes.func.isRequired
             isOutsideRange={() => false}
+            displayFormat="DD MMM YY"
           /> {` `} up until today.
         </section>
       
