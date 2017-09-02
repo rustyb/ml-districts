@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import numeral from 'numeral';
 import moment from 'moment'
-import { SingleDatePicker } from 'react-dates';
+import { DateRangePicker, DayPickerRangeController } from 'react-dates';
 import {
   fetchDistricts
 } from '../actions/action-creators';
@@ -13,17 +13,18 @@ class Visualizaiton extends Component {
     this.renderRow = this.renderRow.bind(this);
     this.renderTable = this.renderTable.bind(this);
     this.getNewStats = this.getNewStats.bind(this);
-    this.state = {startDate: moment().subtract(10, 'days'), focusedInput: null};
+    this.onFocusChange = this.onFocusChange.bind(this);
+    this.state = {startDate: moment().subtract(10, 'days'), endDate: moment(), focusedInput: null};
   }
 
   componentDidMount () {
     this.props._fetchDistricts();
   }
 
-  getNewStats (date) {
-    this.setState({ startDate: date })
+  getNewStats (startDate, endDate) {
+    this.setState({ startDate: startDate, endDate: endDate, })
 
-    return this.props._fetchDistricts(date.format('YYYY-MM-DD'));
+    return this.props._fetchDistricts(startDate.format('YYYY-MM-DD'), endDate.format('YYYY-MM-DD'));
   }
 
   componentDidUpdate (prevProps, prevState) {
@@ -65,17 +66,23 @@ class Visualizaiton extends Component {
       )
   }
 
+  onFocusChange(focusedInput) {
+    this.setState({ focusedInput });
+  }
+
   render () {
     const districts = Object.keys(this.props.districts).slice(1);
+    let focusedInput = null;
     return (
       <div>
         <section className="panel">
         Choose the date to show stats from {` `}
-          <SingleDatePicker
-            date={this.state.startDate} // momentPropTypes.momentObj or null
-            onDateChange={date => this.getNewStats(date)} // PropTypes.func.isRequired
-            focused={this.state.focused} // PropTypes.bool
-            onFocusChange={({ focused }) => this.setState({ focused })} // PropTypes.func.isRequired
+          <DateRangePicker
+            startDate={this.state.startDate}
+            endDate={this.state.endDate}
+            onDatesChange={({ startDate, endDate }) => this.getNewStats(startDate, endDate)} // PropTypes.func.isRequired
+            focusedInput={this.state.focusedInput} // PropTypes.bool
+            onFocusChange={this.onFocusChange} // PropTypes.func.isRequired
             isOutsideRange={() => false}
           /> {` `} up until today.
         </section>
@@ -106,7 +113,7 @@ const selector = (state) => {
 
 const dispatcher = (dispatch) => {
   return {
-    _fetchDistricts: (dateFrom) => dispatch(fetchDistricts(dateFrom))
+    _fetchDistricts: (dateFrom, dateTo) => dispatch(fetchDistricts(dateFrom, dateTo))
   };
 };
 

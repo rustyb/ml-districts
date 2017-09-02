@@ -22,11 +22,12 @@ function recieveDistricts (json) {
   };
 }
 
-export function fetchDistricts (dateFrom) {
+export function fetchDistricts (dateFrom, dateTo) {
   return (dispatch) => {
     dispatch(requestDistricts());
     let from_date = dateFrom || moment().subtract(10, 'days').format('YYYY-MM-DD')
-    let url = `${config.api}/districts-u?date_from=${from_date}`;
+    let to_date = dateTo || moment().format('YYYY-MM-DD')
+    let url = `${config.api}/districts-u?date_from=${from_date}&date_to=${to_date}`;
     return fetch(url)
       .then((response) => {
         return response.json();
