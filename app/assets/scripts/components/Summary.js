@@ -10,7 +10,7 @@ class Summary extends Component {
 
   renderRow (row) {
     return (
-      <tr key={row.user}>
+      <tr key={row.user+row.c}>
         <th>{row.user}</th>
         <td>{+row.c}</td>
         <td>{+row.m}</td>
@@ -23,9 +23,9 @@ class Summary extends Component {
     const rows = data.slice(1).map(row => {return this.renderRow(row)});
     const total = +data[0].t
     return (
-      <div>
+      <div key={district}>
       <h2>{`${district} (${numeral(total).format()})`}</h2>
-      <table key={district} className="table">
+      <table  className="table">
         <thead>
           <tr>
             <th>User</th>
@@ -46,6 +46,7 @@ class Summary extends Component {
     return (
       <div className="Selector--main">
         <div className="select--header">
+          <img src="./assets/graphics/layout/maplesotho-logo_neg.svg" alt="maplesotho logo" className="mast-logo__image" />
           <h1>Summary</h1>
         </div>
         <div className="selector--body">
@@ -53,7 +54,7 @@ class Summary extends Component {
           <dt>Total</dt>
           <dd>{numeral(this.props.districts[null][0].t).format()}</dd>
           {districts.map((dis) => {
-            return (<div>
+            return (<div key={dis}>
               <dt>{dis}</dt>
               <dd>{numeral(this.props.districts[dis][0].t).format()}</dd>
               </div>

@@ -46,7 +46,7 @@ const selector = (state) => {
 
 const dispatcher = (dispatch) => {
   return {
-    _fetchDistricts: () => dispatch(fetchDistricts())
+    _fetchDistricts: (dateFrom) => dispatch(fetchDistricts(dateFrom))
   };
 };
 

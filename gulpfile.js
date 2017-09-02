@@ -62,7 +62,8 @@ gulp.task('serve', ['vendorScripts', 'javascript', 'styles', 'fonts'], function 
       baseDir: ['.tmp', 'app'],
       routes: {
         '/node_modules': './node_modules'
-      }
+      },
+      middleware: require('ml-design/gulp-addons').graphicsMiddleware(fs)
     }
   });
 

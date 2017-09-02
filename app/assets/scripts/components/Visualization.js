@@ -3,18 +3,38 @@ import { connect } from 'react-redux';
 import numeral from 'numeral';
 import moment from 'moment'
 import { SingleDatePicker } from 'react-dates';
+import {
+  fetchDistricts
+} from '../actions/action-creators';
 
 class Visualizaiton extends Component {
   constructor (props) {
     super(props);
     this.renderRow = this.renderRow.bind(this);
     this.renderTable = this.renderTable.bind(this);
-    this.state = {startDate: moment().subtract(10, 'days'), endDate: moment(), focusedInput: null};
+    this.getNewStats = this.getNewStats.bind(this);
+    this.state = {startDate: moment().subtract(10, 'days'), focusedInput: null};
+  }
+
+  componentDidMount () {
+    this.props._fetchDistricts('2017-01-01');
+  }
+
+  getNewStats (date) {
+    this.setState({ startDate: date })
+
+    return this.props._fetchDistricts(date.format('YYYY-MM-DD'));
+  }
+
+  componentDidUpdate (prevProps, prevState) {
+    if (prevProps.districtsFetched !== this.props.districtsFetched) {
+      return this.getNewStats();
+    }
   }
 
   renderRow (row) {
     return (
-      <tr key={row.user}>
+      <tr key={row.user+row.c}>
         <th>{row.user}</th>
         <td>{+row.c}</td>
         <td>{+row.m}</td>
@@ -27,9 +47,9 @@ class Visualizaiton extends Component {
     const rows = data.slice(1).map(row => {return this.renderRow(row)});
     const total = +data[0].t
     return (
-      <div>
+      <div key={district+''}>
       <h2>{`${district} (${numeral(total).format()})`}</h2>
-      <table key={district} className="table">
+      <table  className="table">
         <thead>
           <tr>
             <th>User</th>
@@ -53,11 +73,11 @@ class Visualizaiton extends Component {
         Choose the date to show stats from {` `}
           <SingleDatePicker
             date={this.state.startDate} // momentPropTypes.momentObj or null
-            onDateChange={date => this.setState({ date })} // PropTypes.func.isRequired
+            onDateChange={date => this.getNewStats(date)} // PropTypes.func.isRequired
             focused={this.state.focused} // PropTypes.bool
             onFocusChange={({ focused }) => this.setState({ focused })} // PropTypes.func.isRequired
             isOutsideRange={() => false}
-          />
+          /> {` `} up until today.
         </section>
       
       <section className="panel">
@@ -79,12 +99,15 @@ class Visualizaiton extends Component {
 
 const selector = (state) => {
   return {
-    districts: state.maplesothoDistricts.districts
+    districts: state.maplesothoDistricts.districts,
+    districtsFetched: state.maplesothoDistricts.fetched,
   };
 };
 
 const dispatcher = (dispatch) => {
-  return {};
+  return {
+    _fetchDistricts: (dateFrom) => dispatch(fetchDistricts(dateFrom))
+  };
 };
 
 export default connect(selector, dispatcher)(Visualizaiton);

@@ -1,6 +1,7 @@
 import fetch from 'isomorphic-fetch';
 import * as actions from './action-types';
 import config from '../config';
+import moment from 'moment';
 // import { generateCountryStats, generateUserStats } from '../lib/generateStats';
 
 // ////////////////////////////////////////////////////////////////
@@ -21,10 +22,11 @@ function recieveDistricts (json) {
   };
 }
 
-export function fetchDistricts () {
+export function fetchDistricts (dateFrom) {
   return (dispatch) => {
     dispatch(requestDistricts());
-    let url = `${config.api}/districts-u?date_from=2017-07-24`;
+    let from_date = dateFrom || moment().subtract(10, 'days').format('YYYY-MM-DD')
+    let url = `${config.api}/districts-u?date_from=${from_date}`;
     return fetch(url)
       .then((response) => {
         return response.json();
