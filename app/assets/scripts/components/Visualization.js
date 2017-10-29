@@ -76,6 +76,7 @@ class Visualizaiton extends Component {
     return (
       <div>
         <section className="panel">
+        <div className="filters">
         Choose the date to show stats from {` `}
           <DateRangePicker
             startDate={this.state.startDate}
@@ -86,7 +87,9 @@ class Visualizaiton extends Component {
             isOutsideRange={() => false}
             displayFormat="DD MMM YY"
           /> {` `} up until today.
+        </div>
         </section>
+
       
       <section className="panel">
         <header className="panel__header">
